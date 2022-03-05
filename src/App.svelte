@@ -1,6 +1,22 @@
 <script lang="ts">
 	export let name: string;
 
+	type Record = {
+			HourUTC: Date;
+			HourDK: Date;
+			PriceArea: string;
+			SpotPriceDKK: number;
+			SpotPriceEUR: number;
+		};
+
+	type ElspotPriceObject = {
+		elspotprices: Array<Record>
+	};
+
+	type ResponseObject = {
+		data: ElspotPriceObject
+	};
+
 	async function postToEnergidataservice() {
 
 		let url: string = 'https://data-api.energidataservice.dk/v1/graphql';
@@ -26,25 +42,23 @@
 			body: JSON.stringify(query)
 		});
 
-		return await response.json
+		const dataset: Promise<ResponseObject> = response.json();
+		let data_array = (await dataset).data.elspotprices;
+		return await data_array
 	}
 
-	postToEnergidataservice()
-		.then(data => {console.log(data)});
-
-	const fetchImage = (async () => {
-		const response = await fetch('https://dog.ceo/api/breeds/image/random')
-    return await response.json()
-	})()
+	const elspot_query = (async() => {
+		const response = await postToEnergidataservice();
+		return await JSON.stringify(response)
+	})();
 </script>
 
 <main>
 	<h1>{name}</h1>
-	{#await fetchImage}
+	{#await elspot_query}
 		<p>...waiting</p>
-	{:then dog_data }
-		<!-- svelte-ignore a11y-img-redundant-alt -->
-		<img src={dog_data.message} alt="Dog image" />
+	{:then timeseries }
+		<p>{timeseries}</p>
 	{:catch error}
 		<p>An error occurred!</p>
 	{/await}
