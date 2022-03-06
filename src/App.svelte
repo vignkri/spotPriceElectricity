@@ -93,12 +93,12 @@ import { svg_element } from 'svelte/internal';
 
 		let marginDef = {
 			marginTop: 20,
-			marginRight: 30,
+			marginRight: 50,
 			marginBottom: 30,
-			marginLeft: 40
+			marginLeft: 50
 		};
 
-		const width = 800;
+		const width = window.innerWidth;
 		const height = 400;
 
 		const xRange = [marginDef.marginLeft, width - marginDef.marginRight];
@@ -188,7 +188,7 @@ import { svg_element } from 'svelte/internal';
 
 	@media (min-width: 640px) {
 		main {
-			max-width: none;
+			max-width: 1080px;
 		}
 	}
 </style>
