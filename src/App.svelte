@@ -81,8 +81,6 @@ import { svg_element } from 'svelte/internal';
 
 		let data = await elspot_query;
 
-		console.log(data);
-
 		const X = d3.map(data, d => d.dates);
 		const Y = d3.map(data, d => d.spotPriceDKK);
 		const I = d3.range(X.length);
