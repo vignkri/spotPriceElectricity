@@ -29,13 +29,14 @@ import { svg_element } from 'svelte/internal';
 		// Get the data for given date
 		const today: Date = new Date();
 		let days: number = 86400000 //number of milliseconds in a day
+		const tomorrow: Date = new Date( today.getTime() + days);
 		const seven_days_ago: Date = new Date( today.getTime() - (7 * days));
 
-		const today_str: string = today.toISOString().split("T")[0];
+		const tomorrow_str: string = tomorrow.toISOString().split("T")[0];
 		const past_str: string = seven_days_ago.toISOString().split("T")[0];
 
 		let query = {
-			"query": "query Dataset {elspotprices(where: {HourUTC: {_gte: \"" + past_str + "\", _lte: \"" +  today_str + "\"}PriceArea: {_eq: \"" + filter + "\"}} order_by: {HourUTC: desc} offset: 0){HourUTC HourDK PriceArea SpotPriceDKK SpotPriceEUR }}"
+			"query": "query Dataset {elspotprices(where: {HourUTC: {_gte: \"" + past_str + "\", _lte: \"" +  tomorrow_str + "\"}PriceArea: {_eq: \"" + filter + "\"}} order_by: {HourUTC: desc} offset: 0){HourUTC HourDK PriceArea SpotPriceDKK SpotPriceEUR }}"
 		};
 
 		const response = await fetch(url, {
