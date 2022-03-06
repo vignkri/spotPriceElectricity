@@ -156,12 +156,8 @@ import { svg_element } from 'svelte/internal';
 
 <main>
 	<div id="title">
-		<h1>{name}</h1>
-		<p>
-			The price you pay for electricity is the spot price + taxes and tariffs. If the spot prices are high, the price you pay for electricity goes up. If the prices are low, then you pay much lower prices in total. Ideally, the price should be low when you use your most expensive appliance i.e., washing machine, dishwasher, ovens, electric vehicles.
-		</p>
+		<h1>DK2 {name}</h1>
 	</div>
-	<hr>
 	<svg></svg>
 	<div bind:this={el} id="timeseries" class="svg">
 
@@ -177,7 +173,7 @@ import { svg_element } from 'svelte/internal';
 	}
 	
 	div#title {
-		width: 100%;
+		width: 98%;
 	}
 
 	h1 {
