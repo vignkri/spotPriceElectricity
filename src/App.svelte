@@ -189,7 +189,7 @@ import { svg_element } from 'svelte/internal';
 
 	@media (min-width: 640px) {
 		main {
-			max-width: 1080px;
+			max-width: null;
 		}
 	}
 </style>
