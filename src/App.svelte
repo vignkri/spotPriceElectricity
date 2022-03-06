@@ -36,7 +36,7 @@ import { svg_element } from 'svelte/internal';
 		const past_str: string = seven_days_ago.toISOString().split("T")[0];
 
 		let query = {
-			"query": "query Dataset {elspotprices(where: {HourUTC: {_gte: \"" + past_str + "\", _lte: \"" +  tomorrow_str + "\"}PriceArea: {_eq: \"" + filter + "\"}} order_by: {HourUTC: desc} offset: 0){HourUTC HourDK PriceArea SpotPriceDKK SpotPriceEUR }}"
+			"query": "query Dataset {elspotprices(where: {HourUTC: {_gte: \"" + past_str + "\", _lte: \"" +  tomorrow_str + "\"}PriceArea: {_eq: \"" + filter + "\"}} order_by: {HourUTC: desc} offset: 0){ HourDK SpotPriceDKK SpotPriceEUR }}"
 		};
 
 		const response = await fetch(url, {
@@ -64,7 +64,7 @@ import { svg_element } from 'svelte/internal';
 		const output = response.map(record => {
 
 			let current_date: Date = new Date(record.HourDK);
-			let spotPriceInDKKForkWH: number = record.SpotPriceDKK / 1000;
+			let spotPriceInDKKForkWH: number = (record.SpotPriceEUR * 7.44) / 1000;
 
 			return {
 				dates: current_date,
@@ -157,6 +157,9 @@ import { svg_element } from 'svelte/internal';
 <main>
 	<div id="title">
 		<h1>DK2 {name}</h1>
+		<p id="ref">
+			Built by <a href="https://vigne.sh">Vignesh Krishnamoorthy</a>
+		</p>
 	</div>
 	<svg></svg>
 	<div bind:this={el} id="timeseries" class="svg">
@@ -174,6 +177,11 @@ import { svg_element } from 'svelte/internal';
 	
 	div#title {
 		width: 98%;
+		margin-bottom: 10px;
+	}
+
+	a#ref {
+		margin-top: -10px;
 	}
 
 	h1 {
