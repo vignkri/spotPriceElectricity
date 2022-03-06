@@ -20,7 +20,7 @@
 		data: ElspotPriceObject
 	};
 
-	async function postToEnergidataservice() {
+	async function postToEnergidataservice(filter) {
 
 		let url: string = 'https://data-api.energidataservice.dk/v1/graphql';
 
@@ -33,7 +33,7 @@
 		const past_str: string = seven_days_ago.toISOString().split("T")[0];
 
 		let query = {
-			"query": "query Dataset {elspotprices(where: {HourUTC: {_gte: \"" + past_str + "\", _lte: \"" +  today_str + "\"}PriceArea: {_eq: \"DK2\"}} order_by: {HourUTC: desc} offset: 0){HourUTC HourDK PriceArea SpotPriceDKK SpotPriceEUR }}"
+			"query": "query Dataset {elspotprices(where: {HourUTC: {_gte: \"" + past_str + "\", _lte: \"" +  today_str + "\"}PriceArea: {_eq: \"" + filter + "\"}} order_by: {HourUTC: desc} offset: 0){HourUTC HourDK PriceArea SpotPriceDKK SpotPriceEUR }}"
 		};
 
 		const response = await fetch(url, {
@@ -53,7 +53,9 @@
 	}
 
 	const elspot_query: Promise<string> = (async() => {
-		const response = await postToEnergidataservice();
+
+		const filter: string = "DK2";
+		const response = await postToEnergidataservice(filter);
 
 		const output = response.map(record => {
 
@@ -73,10 +75,13 @@
 </script>
 
 <main>
-	<h1>{name}</h1>
-	<p>
-		The price you pay for electricity is the spot price + taxes and tariffs. If the spot prices are high, the price you pay for electricity goes up. If the prices are low, then you pay much lower prices in total. Ideally, the price should be low when you use your most expensive appliance i.e., washing machine, dishwasher, ovens, electric vehicles.
-	</p>
+	<div id="title">
+		<h1>{name}</h1>
+		<p>
+			The price you pay for electricity is the spot price + taxes and tariffs. If the spot prices are high, the price you pay for electricity goes up. If the prices are low, then you pay much lower prices in total. Ideally, the price should be low when you use your most expensive appliance i.e., washing machine, dishwasher, ovens, electric vehicles.
+		</p>
+	</div>
+	<hr>
 	{#await elspot_query}
 		<p>...waiting</p>
 	{:then timeseries }
@@ -88,10 +93,14 @@
 
 <style>
 	main {
-		text-align: center;
+		text-align: left;
 		padding: 1em;
-		max-width: 240px;
+		width: 100%;
 		margin: 0 auto;
+	}
+	
+	div#title {
+		width: 100%;
 	}
 
 	h1 {
