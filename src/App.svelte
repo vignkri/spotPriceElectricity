@@ -26,9 +26,11 @@
 		let days: number = 86400000 //number of milliseconds in a day
 		const seven_days_ago: Date = new Date( today.getTime() - (7 * days));
 
+		const today_str: string = today.toISOString().split("T")[0];
+		const past_str: string = seven_days_ago.toISOString().split("T")[0];
 
 		let query = {
-			"query": "query Dataset {elspotprices(where: {HourUTC: {_gte: \"2022-02-27\", _lt: \"2022-03-05\"}PriceArea: {_eq: \"DK2\"}} order_by: {HourUTC: desc} offset: 0){HourUTC HourDK PriceArea SpotPriceDKK SpotPriceEUR }}"
+			"query": "query Dataset {elspotprices(where: {HourUTC: {_gte: \"" + past_str + "\", _lte: \"" +  today_str + "\"}PriceArea: {_eq: \"DK2\"}} order_by: {HourUTC: desc} offset: 0){HourUTC HourDK PriceArea SpotPriceDKK SpotPriceEUR }}"
 		};
 
 		const response = await fetch(url, {
@@ -49,6 +51,8 @@
 
 	const elspot_query = (async() => {
 		const response = await postToEnergidataservice();
+
+		console.log(response);
 		return await JSON.stringify(response)
 	})();
 </script>
