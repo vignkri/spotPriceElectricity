@@ -59,6 +59,9 @@
 
 <main>
 	<h1>{name}</h1>
+	<p>
+		The price you pay for electricity is the spot price + taxes and tariffs. If the spot prices are high, the price you pay for electricity goes up. If the prices are low, then you pay much lower prices in total. Ideally, the price should be low when you use your most expensive appliance i.e., washing machine, dishwasher, ovens, electric vehicles.
+	</p>
 	{#await elspot_query}
 		<p>...waiting</p>
 	{:then timeseries }
