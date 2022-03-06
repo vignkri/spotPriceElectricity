@@ -1,4 +1,7 @@
 <script lang="ts">
+
+	import { onMount } from 'svelte';
+
 	export let name: string;
 
 	type Record = {
@@ -49,12 +52,24 @@
 		return await data_array
 	}
 
-	const elspot_query = (async() => {
+	const elspot_query: Promise<string> = (async() => {
 		const response = await postToEnergidataservice();
 
-		console.log(response);
-		return await JSON.stringify(response)
+		const output = response.map(record => {
+
+			let current_date: Date = new Date(record.HourDK);
+			let spotPriceInDKKForkWH: number = record.SpotPriceDKK / 1000;
+
+			return {
+				isoDate: current_date.toISOString().split("T")[0],
+				hourOfDay: current_date.toISOString().split("T")[1].split("+")[0],
+				spotPriceDKKkWh: spotPriceInDKKForkWH,
+			}
+		})
+		
+		return await JSON.stringify(output)
 	})();
+
 </script>
 
 <main>
@@ -67,7 +82,7 @@
 	{:then timeseries }
 		<p>{timeseries}</p>
 	{:catch error}
-		<p>An error occurred!</p>
+		<p>An error occurred, unable to fetch data</p>
 	{/await}
 </main>
 
