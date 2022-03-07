@@ -29,7 +29,7 @@ import { svg_element } from 'svelte/internal';
 		// Get the data for given date
 		const today: Date = new Date();
 		let days: number = 86400000 //number of milliseconds in a day
-		const tomorrow: Date = new Date( today.getTime() + days);
+		const tomorrow: Date = new Date( today.getTime() + ( 2 * days));
 		const seven_days_ago: Date = new Date( today.getTime() - (7 * days));
 
 		const tomorrow_str: string = tomorrow.toISOString().split("T")[0];
@@ -81,7 +81,8 @@ import { svg_element } from 'svelte/internal';
 	onMount(async() => {
 
 		let data = await elspot_query;
-
+		// TODO: Compute tomorrow's minimum period
+		// TODO: Compute best time to do heavy loads
 		const X = d3.map(data, d => d.dates);
 		const Y = d3.map(data, d => d.spotPriceDKK);
 		const I = d3.range(X.length);
